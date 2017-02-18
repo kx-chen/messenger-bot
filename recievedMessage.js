@@ -1,4 +1,4 @@
-var sendTextMesage = require('./sendMessage.js').sendTextMessage;
+var sendTextMessage = require('./sendMessage.js').sendTextMessage;
 
 
 
@@ -36,10 +36,10 @@ var recievedMessage = function (event) {
         break;
 
       default:
-        sendTextMesage(senderID, messageText);
+        sendTextMessage(senderID, messageText);
     }
   } else if (messageAttachments) {
-    sendTextMesage(senderID, "Message with attachment received");
+    sendTextMessage(senderID, "Message with attachment received");
   }
 }
 

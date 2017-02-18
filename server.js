@@ -67,7 +67,9 @@ app.post('/webhook', function (req, res) {
   
 
 
-
+app.get('/privacy-policy', function(req, res) {
+  res.sendFile(__dirname + '/views/privacy-policy.html');
+});
 
 
 
