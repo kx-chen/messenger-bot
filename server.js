@@ -5,7 +5,7 @@ var app = express();
 var bodyParser = require('body-parser');
 
 var sendMessage = require('./sendMessage.js');
-var sendTextMesage = require('./sendMessage.js').sendTextMessage;
+var sendTextMessage = require('./sendMessage.js').sendTextMessage;
 var recievedMessage = require('./recievedMessage.js').recievedMessage;
 
 
@@ -70,6 +70,24 @@ app.post('/webhook', function (req, res) {
 app.get('/privacy-policy', function(req, res) {
   res.sendFile(__dirname + '/views/privacy-policy.html');
 });
+
+
+
+
+
+app.get('/send', function(req, res) {
+  
+  var message = "GOOD MORNING! RISE AND SHINE FOR A BEAUTIFUL DAY 1/2!!! \nKAI CHEN REQUESTS THAT YOU GET OUT OF BED!!!";
+  // Steven's ID
+  sendTextMessage("1211307408984374", message);
+  sendTextMessage("1211307408984374", message);
+  // Below is my ID
+  sendTextMessage("1219226384779598", message);
+  sendTextMessage("1219226384779598", message);
+  
+  res.sendFile(__dirname + '/views/send.html');
+});
+
 
 
 

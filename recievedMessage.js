@@ -21,13 +21,15 @@ var recievedMessage = function(event) {
     var messageAttachments = message.attachments;
 
     if (messageText) {
-
-        switch (messageText) {
+      var messageTexts = messageText.toLowerCase();
+        switch (messageTexts) {
 
           case 'Hello':
           case 'hello':
           case 'hey':
           case 'Hey':
+          case 'hi':
+          case 'Hi':
                 sendTextMessage(senderID, "Hey there!");
                 break;
           case 'Get Started':
@@ -47,17 +49,17 @@ var recievedMessage = function(event) {
                 sendTextMessage(senderID, "Sorry, I can't find nearby busses yet.");
 
           default:
-                console.log(messageText);
+                console.log(messageTexts);
 
                 var options = {
-                    url: ('http://api.translink.ca/rttiapi/v1/stops/' + messageText + '?apikey=nK9aHp8kThROoJjNpcO3'),
+                    url: ('http://api.translink.ca/rttiapi/v1/stops/' + messageTexts + '?apikey=nK9aHp8kThROoJjNpcO3'),
                     headers: {
                         'accept': 'application/JSON'
                     }
                 };
 
                 var Estimates = {
-                    url: ('http://api.translink.ca/rttiapi/v1/stops/' + messageText + '/estimates?apikey=nK9aHp8kThROoJjNpcO3&count=3&timeframe=120'),
+                    url: ('http://api.translink.ca/rttiapi/v1/stops/' + messageTexts + '/estimates?apikey=nK9aHp8kThROoJjNpcO3&count=3&timeframe=120'),
                     headers: {
                         'accept': 'application/JSON'
                     }
