@@ -24,21 +24,29 @@ var recievedMessage = function(event) {
 
         switch (messageText) {
 
-            case 'fuck you':
-                sendGenericMessage(senderID);
+          case 'Hello':
+          case 'hello':
+          case 'hey':
+          case 'Hey':
+                sendTextMessage(senderID, "Hey there!");
                 break;
-
-            case 'help':
+          case 'Get Started':
+            sendTextMessage(senderID, "Welcome to Next Bus! \n \nTo get info on a bus stop, simply say its 5-digit ID. (eg: 51048)")
+            break;
+          case 'help':
+          case 'sos':
+          case "SOS":
+            
                 sendHelpMessage(senderID);
                 break;
 
-            case 'weather':
+          case 'weather':
                 sendTextMessage(senderID, "Here's the weather: http://www.forecast.io");
                 break;
-            case 'nearby':
+          case 'nearby':
                 sendTextMessage(senderID, "Sorry, I can't find nearby busses yet.");
 
-            default:
+          default:
                 console.log(messageText);
 
                 var options = {
@@ -110,7 +118,7 @@ function sendGenericMessage(recipientId, messageText) {
 }
 
 function sendHelpMessage(recipientId) {
-    sendTextMessage(recipientId, "Here's what I can do: 1. Help with the weather ('weather') 2. Get bus stops for Vancouver BC. All I need is the bus stop number. ('51048') ");
+    sendTextMessage(recipientId, "Here's what I can do: \n\n1. Help with the weather ('weather') \n\n2. Get bus stops for Vancouver BC. All I need is the bus stop number. ('51048')");
 }
 
 
