@@ -14,7 +14,6 @@ var sendText = function (recipientId, messageText) {
 };
 
 
-// Calls the send API
 function callSendAPI (messageData) {
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',

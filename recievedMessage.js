@@ -17,6 +17,7 @@ var recievedMessage = function(event) {
 
     var messageText = message.text;
 
+
     var messageAttachments = message.attachments;
 
     if (messageText) {
