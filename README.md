@@ -1,7 +1,7 @@
 Welcome to Translink Bot
 =========================
 
-[About Translink Bot](https://gomix.com/about)
+[About Translink Bot](https://jet-promotion.gomix.me/)
 
 
 What does it do?
