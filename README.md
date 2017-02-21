@@ -5,23 +5,15 @@ Click `Show` in the header to see your app live. Updates to your code will insta
 
 Gomix is a developer playground that lets you code a real web-app without the slow setup and deployment steps.
 
-[About Gomix](https://gomix.com/about)
+[About Translink Bot](https://gomix.com/about)
 
 
-Your Project
+Translink Bot
 ------------
 
-On the back-end,
-- your app starts at `server.js`
-- add frameworks and packages in `package.json`
-- safely store app secrets in `.env`
+Facebook messenger bot for getting [Translink's](http://translink.ca) Next Bus data info. 
 
-On the front-end,
-- edit `client.js`, `style.css` and `index.html`
-- drag in `assets`, like images or music, to add them to your project
-
-
-Made by Fog Creek
+Built with Node JS and Express JS.
 -----------------
 
 \ ゜o゜)ノ
