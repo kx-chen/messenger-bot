@@ -1,5 +1,12 @@
 var sendTextMessage = require('./sendMessage.js').sendTextMessage;
 var request = require('request');
+var Estimates = require('./requests.js').Estimates;
+var Options = require('./requests.js').Options;
+
+var getBusResults = require('./sendResults.js').getBusResults;
+
+var sendTypingIndicator = require('./sendMessage.js').sendTypingIndicator;
+
 
 
 var recievedMessage = function(event) {
@@ -9,6 +16,9 @@ var recievedMessage = function(event) {
     var timeOfMessage = event.timestamp;
     var message = event.message;
 
+    
+  
+  
     console.log("Received message for user %d and page %d at %d with message:",
         senderID, recipientID, timeOfMessage);
     console.log(JSON.stringify(message));
@@ -21,84 +31,51 @@ var recievedMessage = function(event) {
     var messageAttachments = message.attachments;
 
     if (messageText) {
-      var messageTexts = messageText.toLowerCase();
+        var messageTexts = messageText.toLowerCase();
+      
+      sendTypingIndicator(senderID, "typing_on");
+      
         switch (messageTexts) {
 
-          case 'Hello':
-          case 'hello':
-          case 'hey':
-          case 'Hey':
-          case 'hi':
-          case 'Hi':
+            case 'hello':
+            case 'hey':
+            case 'hi':
                 sendTextMessage(senderID, "Hey there!");
+            sendTypingIndicator(senderID, "typing_off");
                 break;
-          case 'Get Started':
-            sendTextMessage(senderID, "Welcome to Next Bus! \n \nTo get info on a bus stop, simply say its 5-digit ID. (eg: 51048)")
-            break;
-          case 'help':
-          case 'sos':
-          case "SOS":
             
+            case 'get started':
+                sendTextMessage(senderID, "Welcome to Next Bus! \n \nTo get info on a bus stop, simply say its 5-digit ID. (eg: 51048)");
+            sendTypingIndicator(senderID, "typing_off");
+                break;
+            
+            case 'help':
+            case 'sos':
+
+
                 sendHelpMessage(senderID);
+            sendTypingIndicator(senderID, "typing_off");
                 break;
 
-          case 'weather':
+            case 'weather':
                 sendTextMessage(senderID, "Here's the weather: http://www.forecast.io");
+            sendTypingIndicator(senderID, "typing_off");
                 break;
-          case 'nearby':
+            case 'nearby':
                 sendTextMessage(senderID, "Sorry, I can't find nearby busses yet.");
+            sendTypingIndicator(senderID, "typing_off");
+                break;
+            
+          case 'on':
+            sendTypingIndicator(senderID, "typing_on");
+          //  sendTextMessage(senderID, "hello");
+            break;
 
-          default:
-                console.log(messageTexts);
+            default:
+            getBusResults(messageTexts, senderID);
+            sendTypingIndicator(senderID, "typing_off");
+           
 
-                var options = {
-                    url: ('http://api.translink.ca/rttiapi/v1/stops/' + messageTexts + '?apikey=nK9aHp8kThROoJjNpcO3'),
-                    headers: {
-                        'accept': 'application/JSON'
-                    }
-                };
-
-                var Estimates = {
-                    url: ('http://api.translink.ca/rttiapi/v1/stops/' + messageTexts + '/estimates?apikey=nK9aHp8kThROoJjNpcO3&count=3&timeframe=120'),
-                    headers: {
-                        'accept': 'application/JSON'
-                    }
-                };
-
-                request(options, function(error, response, body) {
-                    if (!error && response.statusCode == 200) {
-                        var info = JSON.parse(body);
-                        
-                        var date = new Date();
-                        var utcDate = new Date(date.toUTCString());
-                        utcDate.setHours(utcDate.getHours()-8);
-                        var usDate = new Date(utcDate);
-                      
-                        var hours = usDate.getHours();
-                        var minutes = usDate.getMinutes();
-
-                      
-                        sendTextMessage(senderID, "The current time is " + hours + ":" + minutes);
-                        sendTextMessage(senderID, messageText + " is at " + info.Name + " in " + info.City + ". Buses include " + info.Routes + ".");
-
-                      
-                        request(Estimates, function(error, response, body) {
-                            if (!error && response.statusCode == 200) {
-                                var info = JSON.parse(body);
-                                
-                                
-                    
-                                var leave1 = info[0].Schedules[0].ExpectedLeaveTime;
-                                var leave2 = info[0].Schedules[1].ExpectedLeaveTime;
-                              
-                                sendTextMessage(senderID, "The next bus for " + messageText + " leaves at " + leave1 + " then at, " + leave2);
-                            }
-                        });
-
-                    } else {
-                        sendTextMessage(senderID, "Please provide a valid bus stop. Say 'help' for assistance. ")
-                      }
-                });
         }
 
 
@@ -114,10 +91,6 @@ var recievedMessage = function(event) {
 
 
 
-
-function sendGenericMessage(recipientId, messageText) {
-    sendTextMessage(recipientId, "What did you just call me?")
-}
 
 function sendHelpMessage(recipientId) {
     sendTextMessage(recipientId, "Here's what I can do: \n\n1. Help with the weather ('weather') \n\n2. Get bus stops for Vancouver BC. All I need is the bus stop number. ('51048')");

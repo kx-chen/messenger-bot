@@ -1,8 +1,10 @@
-
 var request = require('request');
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var helpers = require('ejs-helper');
+
+
 
 var sendMessage = require('./sendMessage.js');
 var sendTextMessage = require('./sendMessage.js').sendTextMessage;
@@ -15,9 +17,11 @@ app.use(bodyParser.json());
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
+
 // http://expressjs.com/en/starter/basic-routing.html
-app.get("/", function (request, response) {
-  response.sendFile(__dirname + '/views/index.html');
+app.get("/", function (req, res) {
+  res.render('index', {title: "Home"});
+  
 });
 
 
@@ -68,7 +72,7 @@ app.post('/webhook', function (req, res) {
 
 
 app.get('/privacy-policy', function(req, res) {
-  res.sendFile(__dirname + '/views/privacy-policy.html');
+  res.render('privacy-policy', {title: "Privacy Policy"});
 });
 
 
@@ -78,14 +82,14 @@ app.get('/privacy-policy', function(req, res) {
 app.get('/send', function(req, res) {
   
   var message = "GOOD MORNING! RISE AND SHINE FOR A BEAUTIFUL DAY 1/2!!! \nKAI CHEN REQUESTS THAT YOU GET OUT OF BED!!!";
-  // Steven's ID
-  sendTextMessage("1211307408984374", message);
-  sendTextMessage("1211307408984374", message);
-  // Below is my ID
-  sendTextMessage("1219226384779598", message);
-  sendTextMessage("1219226384779598", message);
+//   // Steven's ID
+//   sendTextMessage("1211307408984374", message);
+//   sendTextMessage("1211307408984374", message);
+//   // Below is my ID
+//   sendTextMessage("1219226384779598", message);
+//   sendTextMessage("1219226384779598", message);
   
-  res.sendFile(__dirname + '/views/send.html');
+  res.render("send", {title: "Daily Message Sender"});
 });
 
 

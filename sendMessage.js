@@ -37,4 +37,16 @@ function callSendAPI (messageData) {
 };
 
 
+var sendTypingIndicator = function(recipientID, typing) {
+  var typingData = {
+    "recipient":{
+          "id":recipientID
+    },
+    
+    "sender_action": typing 
+  }
+  callSendAPI(typingData);
+}
+
 module.exports.sendTextMessage = sendText;
+module.exports.sendTypingIndicator = sendTypingIndicator;
