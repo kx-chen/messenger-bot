@@ -1,6 +1,14 @@
+// Sends the data to the call API 
+
+// Contains sendTextMessage, callSendAPI, sendTypingIndicator, and sendText
 var request = require('request');
 
-var sendText = function (recipientId, messageText) {
+
+
+
+
+
+var sendTextMessage = function (recipientId, messageText) {
   var messageData = {
     recipient: {
       id: recipientId
@@ -12,6 +20,11 @@ var sendText = function (recipientId, messageText) {
 
   callSendAPI(messageData);
 };
+
+
+
+
+
 
 
 function callSendAPI (messageData) {
@@ -28,6 +41,7 @@ function callSendAPI (messageData) {
 
       console.log("Successfully sent generic message with id %s to recipient %s", 
         messageId, recipientId);
+      
     } else {
       console.error("Unable to send message.");
       console.error(response);
@@ -35,6 +49,10 @@ function callSendAPI (messageData) {
     }
   });  
 };
+
+
+
+
 
 
 var sendTypingIndicator = function(recipientID, typing) {
@@ -48,5 +66,36 @@ var sendTypingIndicator = function(recipientID, typing) {
   callSendAPI(typingData);
 }
 
-module.exports.sendTextMessage = sendText;
+
+
+
+
+
+
+
+var sendLocationOption = function(recipientID) {
+ var LocationData = {
+    "recipient":{
+          "id":recipientID
+    },
+    
+     "message":{
+    "text":"Please share your location:",
+    "quick_replies":[
+      {
+        "content_type":"location",
+      }
+    ]
+  }
+   
+  }
+ callSendAPI(LocationData)
+}
+
+
+
+
+
+module.exports.sendLocationOption = sendLocationOption;
+module.exports.sendTextMessage = sendTextMessage;
 module.exports.sendTypingIndicator = sendTypingIndicator;

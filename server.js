@@ -5,6 +5,9 @@ var bodyParser = require('body-parser');
 var helpers = require('ejs-helper');
 
 
+var recievedPostback = require('./recievedPostback.js');
+
+var sendMessage = require('./sendMessage.js');
 
 var sendMessage = require('./sendMessage.js');
 var sendTextMessage = require('./sendMessage.js').sendTextMessage;
@@ -58,17 +61,32 @@ app.post('/webhook', function (req, res) {
 
       // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
+        
+        sendMessage.sendTypingIndicator(event.sender.id, "mark_seen");
+        
         if (event.message) {
           recievedMessage(event);
+          
+        } else if (event.postback) {
+          
+            recievedPostback.recievedPostback(event);
+          
         } else {
           console.log("Webhook received unknown event: ", event);
+          
         }
       });
     });
+    
     res.sendStatus(200);
   }
 });
   
+
+
+
+
+
 
 
 app.get('/privacy-policy', function(req, res) {
@@ -79,20 +97,37 @@ app.get('/privacy-policy', function(req, res) {
 
 
 
+
+
+
+
+
+
 app.get('/send', function(req, res) {
   
   var message = "GOOD MORNING! RISE AND SHINE FOR A BEAUTIFUL DAY 1/2!!! \nKAI CHEN REQUESTS THAT YOU GET OUT OF BED!!!";
-//   // Steven's ID
-//   sendTextMessage("1211307408984374", message);
-//   sendTextMessage("1211307408984374", message);
-//   // Below is my ID
-//   sendTextMessage("1219226384779598", message);
-//   sendTextMessage("1219226384779598", message);
+  // Steven's ID
+  sendTextMessage("1211307408984374", message);
+  sendTextMessage("1211307408984374", message);
+  // Below is my ID
+  sendTextMessage("1219226384779598", message);
+  sendTextMessage("1219226384779598", message);
   
   res.render("send", {title: "Daily Message Sender"});
 });
 
 
+
+
+
+
+
+
+app.get('/feedback', function(req, res) {
+  
+  res.render('feedback', {title: "Feedback"} );
+  
+});
 
 
 
