@@ -1,7 +1,5 @@
 // This file calls the API using the constructed data that was made in requests.js
-
 // Contains getBusResults, and getLocationResults functions
-
 var request = require('request');
 
 var Options = require('./requests.js').Options;
@@ -12,74 +10,62 @@ var sendTypingIndicator = require('./sendMessage.js').sendTypingIndicator
 
 
 
-//     var str = "51048 16";
-//     var res = str.split(" ");
-    
-//     document.getElementById("demo").innerHTML = res[0];
-//     document.getElementById("demo2").innerHTML = res[1];
-
-
-
-
 
 var getBusResults = function(messageTexts, senderID) {
+          sendTypingIndicator (senderID, "typing_on");
+           var res = messageTexts.split(" ");
 
-    request(Options(messageTexts), function(error, response, body) {
+            var busStopNumber = res[0];
+            var routeNo = res[1];
+          
+            console.log(busStopNumber);
+            console.log(routeNo);
+
+    request(Options(busStopNumber), function(error, response, body) {
         if (!error && response.statusCode == 200) {
+
+           
+
             var info = JSON.parse(body);
+          var routes = info.Routes;
+              
+          request(Estimates(busStopNumber, routeNo), function(error, response, body) {
+            if (!error && response.statusCode == 200) {
+              
+              var info = JSON.parse(body);
 
-            var date = new Date();
-            var utcDate = new Date(date.toUTCString());
-            utcDate.setHours(utcDate.getHours() - 8);
-            var usDate = new Date(utcDate);
 
-            var hours = usDate.getHours();
-            var minutes = usDate.getMinutes();
+
+            var leave1 = info[0].Schedules[0].ExpectedLeaveTime;
+            var leave2 = info[0].Schedules[1].ExpectedLeaveTime;
 
             
-            sendTextMessage(senderID, "The current time is " + hours + ":" + minutes);
+                sendTextMessage(senderID, "The next [" + routeNo + "] bus for " + busStopNumber + " leaves at " + leave1 + " then at, " + leave2);
+
+            } else {
+              
+                setTimeout(function() {
+                  
+                sendTextMessage(senderID, "Please text [stop#] [bus#] for next bus times. Buses for " + busStopNumber + " are " + routes);
+            }, 2000);
+              
+            }
+            
+          });
           
-            setTimeout(function() {
-                          sendTextMessage(senderID, messageTexts + " is at " + info.Name + " in " + info.City + ". Buses include " + info.Routes + ".");
 
-            }), 500;
-
-
-            request(Estimates(messageTexts), function(error, response, body) {
-                if (!error && response.statusCode == 200) {
-                    var info = JSON.parse(body);
-
-
-
-                    var leave1 = info[0].Schedules[0].ExpectedLeaveTime;
-                    var leave2 = info[0].Schedules[1].ExpectedLeaveTime;
-               setTimeout(function() {
-                                    sendTextMessage(senderID, "The next bus for " + messageTexts + " leaves at " + leave1 + " then at, " + leave2);
-
-            }), 1500
-
-                }
-            });
-
-        } else {
           
-          var errorMessages = ["k", "Oops, I didn't catch that. For things I can help you with, type 'help' ", "I’m sorry; I’m not sure I understand. Try typing 'help' or typing a 5-digit Bus Stop number. ", "So, I’m good at giving you transit info. Other stuff, not so good. If you need help just enter “help.”"]
           
-            sendTextMessage(senderID, errorMessages[ Math.floor((Math.random() * 3) + 1) ] )
+          
+            } else {
+
+            var errorMessages = ["k", "Oops, I didn't catch that. For things I can help you with, type 'help' ", "I’m sorry; I’m not sure I understand. Try typing 'help' or typing a 5-digit Bus Stop number. ", "So, I’m good at giving you transit info. Other stuff, not so good. If you need help just enter “help.”"]
+
+            sendTextMessage(senderID, errorMessages[Math.floor((Math.random() * 3) + 1)])
         }
         sendTypingIndicator(senderID, "typing_off");
     });
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -105,6 +91,7 @@ var getLocationResults = function(senderID, lat, long) {
         sendTypingIndicator(senderID, "typing_off");
     });
 }
+
 
 
 

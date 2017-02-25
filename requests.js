@@ -17,10 +17,10 @@ var Options = function(messageTexts) {
 
 
 // JSON data for estimates of arrival times
-var Estimates = function(messageTexts) {
+var Estimates = function(stopNumber, routeNo) {
 
     var Object = {
-        url: ('http://api.translink.ca/rttiapi/v1/stops/' + messageTexts + '/estimates?apikey=nK9aHp8kThROoJjNpcO3&count=3&timeframe=120'),
+        url: ('http://api.translink.ca/rttiapi/v1/stops/' + stopNumber + '/estimates?apikey=nK9aHp8kThROoJjNpcO3&count=3&routeNo=' + routeNo),
         headers: {
             'accept': 'application/JSON'
         }
