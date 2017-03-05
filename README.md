@@ -1,15 +1,5 @@
 Welcome to Translink Bot
 =========================
+Accepts a bus stop number and send back the bus schedule.
 
-[About Translink Bot](https://jet-promotion.gomix.me/)
 
-
-What does it do?
-----------------
-
-Facebook messenger bot for getting [Translink's](http://translink.ca) Next Bus data info. 
-
-Built with Node JS and Express JS.
------------------
-
-\ ゜o゜)ノ
