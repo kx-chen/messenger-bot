@@ -1,5 +1,6 @@
-// This file calls the API using the constructed data that was made in requests.js
+// These functions get results from Translink's API
 // Contains getBusResults, and getLocationResults functions
+
 var request = require('request');
 
 var Options = require('./requests.js').Options;
@@ -8,24 +9,16 @@ var LocationData = require('./requests.js').LocationData;
 var sendTextMessage = require('./sendMessage.js').sendTextMessage;
 var sendTypingIndicator = require('./sendMessage.js').sendTypingIndicator
 
-
-
-
 var getBusResults = function(messageTexts, senderID) {
+  
           sendTypingIndicator (senderID, "typing_on");
            var res = messageTexts.split(" ");
 
             var busStopNumber = res[0];
             var routeNo = res[1];
-          
-            console.log(busStopNumber);
-            console.log(routeNo);
 
     request(Options(busStopNumber), function(error, response, body) {
         if (!error && response.statusCode == 200) {
-
-           
-
             var info = JSON.parse(body);
           var routes = info.Routes;
               
@@ -47,14 +40,13 @@ var getBusResults = function(messageTexts, senderID) {
                 setTimeout(function() {
                   
                 sendTextMessage(senderID, "Please text [stop#] [bus#] for next bus times. Buses for " + busStopNumber + " are " + routes);
+                  
+                  
             }, 2000);
               
             }
             
           });
-          
-
-          
           
           
             } else {
@@ -63,15 +55,11 @@ var getBusResults = function(messageTexts, senderID) {
 
             sendTextMessage(senderID, errorMessages[Math.floor((Math.random() * 3) + 1)])
         }
-        sendTypingIndicator(senderID, "typing_off");
+       
     });
 }
 
-
-
-
 var getLocationResults = function(senderID, lat, long) {
-
     request(LocationData(lat, long), function(error, response, body) {
         if (!error && response.statusCode == 200) {
             var info = JSON.parse(body);
@@ -91,9 +79,6 @@ var getLocationResults = function(senderID, lat, long) {
         sendTypingIndicator(senderID, "typing_off");
     });
 }
-
-
-
 
 module.exports.getLocationResults = getLocationResults;
 module.exports.getBusResults = getBusResults;

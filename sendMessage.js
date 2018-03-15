@@ -1,13 +1,8 @@
-// Sends the data to the call API 
+// contains functions to call facebook api. also contains json to send back to user for structured replies
 
 // Contains sendTextMessage, callSendAPI, sendTypingIndicator, and sendText
 var request = require('request');
-
-
-
-
-
-
+// sends back text message
 var sendTextMessage = function (recipientId, messageText) {
   var messageData = {
     recipient: {
@@ -17,16 +12,10 @@ var sendTextMessage = function (recipientId, messageText) {
       text: messageText
     }
   };
-
   callSendAPI(messageData);
 };
 
-
-
-
-
-
-
+// Calls the Facebook send API with the proper data
 function callSendAPI (messageData) {
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
@@ -50,11 +39,7 @@ function callSendAPI (messageData) {
   });  
 };
 
-
-
-
-
-
+// used for telling the messenger app that the app is working on a request...
 var sendTypingIndicator = function(recipientID, typing) {
   var typingData = {
     "recipient":{
@@ -66,13 +51,7 @@ var sendTypingIndicator = function(recipientID, typing) {
   callSendAPI(typingData);
 }
 
-
-
-
-
-
-
-
+// Constructs location json data to be sent
 var sendLocationOption = function(recipientID) {
  var LocationData = {
     "recipient":{
@@ -92,10 +71,18 @@ var sendLocationOption = function(recipientID) {
  callSendAPI(LocationData)
 }
 
+var sendStucturedCards = function(recipientID) {
+  var data = {
+    "recipient": {
+      "id": recipientID
+    },
+    "message" : {
+      
+    }
+  }
+}
 
-
-
-
+// https://developers.facebook.com/docs/messenger-platform/send-api-reference/list-template
 module.exports.sendLocationOption = sendLocationOption;
 module.exports.sendTextMessage = sendTextMessage;
 module.exports.sendTypingIndicator = sendTypingIndicator;
